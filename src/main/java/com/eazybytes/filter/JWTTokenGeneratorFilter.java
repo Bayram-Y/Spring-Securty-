@@ -21,13 +21,6 @@ import java.util.stream.Collectors;
 
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
-    /**
-     * @param request
-     * @param response
-     * @param filterChain
-     * @throws ServletException
-     * @throws IOException
-     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
@@ -43,7 +36,7 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                         .claim("authorities", authentication.getAuthorities().stream().map(
                                 GrantedAuthority::getAuthority).collect(Collectors.joining(",")))
                         .issuedAt(new Date())
-                        .expiration(new Date((new Date()).getTime() + 30000000))
+                        .expiration(new Date((new Date()).getTime() + 7200000))
                         .signWith(secretKey).compact();
                 response.setHeader(ApplicationConstants.JWT_HEADER, jwt);
             }
